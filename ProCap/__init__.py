@@ -31,7 +31,9 @@ class ProCap:
         request = requests.get("https://api.procap.wtf/checkTask/"+id)
         return Task(request.json())
     def solve(self, url, sitekey, proxy=None, userAgent=None, rqdata=None):
-        task = self.createTask(self, url, sitekey, proxy, userAgent, rqdata)
+        task = self.createTask(url, sitekey, proxy, userAgent, rqdata)
+        if not task.success:
+            return task.message
         while True:
             captcha_challenge = self.checkTask(task.id)
             if captcha_challenge.message != "solving" and captcha_challenge.message != "solved":
