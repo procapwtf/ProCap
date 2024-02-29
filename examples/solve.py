@@ -6,4 +6,5 @@ proxy = "" # Proxy (optional)
 userAgent = "" # User agent (optional)
 rqdata = "" # RQData (optional)
 solver = ProCap(apikey) # Replace "api" with your api key !!
-captchaToken = solver.solve(url=url, sitekey=sitekey, proxy=proxy, userAgent=userAgent, rqdata=rqdata))
+captchaToken = solver.solve(url=url, sitekey=sitekey, proxy=proxy, userAgent=userAgent, rqdata=rqdata)
+print(f"Captcha solved : {captchaToken}")
