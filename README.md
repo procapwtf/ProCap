@@ -59,3 +59,12 @@ captchaTask.success # Success [True or False]
 captchaTask.token # Captcha Token (if solved)
 captchaTask.challengeKey # Captcha challenge key
 ```
+
+* 4 - Example (Get balance)
+```python
+from procap import ProCap
+apikey = "" # Api key (required)
+solver = ProCap(apikey)
+balance = solver.get_balance()
+print(f"Your balance is {balance}$")
+```
