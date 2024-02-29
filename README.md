@@ -48,6 +48,7 @@ captchaTask.challengeKey # Captcha challenge key
 * 3 - Example (Get Task Result)
 ```python
 from procap import ProCap
+apikey = "" # Your api key
 solver = ProCap(apikey)
 id = "Challenge ID" 
 captchaTask = solver.checkTask(id)
