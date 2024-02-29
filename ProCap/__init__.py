@@ -1,4 +1,5 @@
 import requests
+import time
 class Task:
     def __init__(self, response: dict) -> None:
         self.id = response.get("ID")
@@ -29,3 +30,12 @@ class ProCap:
     def checkTask(self, id):
         request = requests.get("https://api.procap.wtf/checkTask/"+id)
         return Task(request.json())
+    def solve(self, url, sitekey, proxy=None, userAgent=None, rqdata=None):
+        task = self.createTask(self, url, sitekey, proxy, userAgent, rqdata)
+        while True:
+            captcha_challenge = self.checkTask(task.id)
+            if captcha_challenge.message != "solving" and captcha_challenge.message != "solved":
+                return None
+            if captcha_challenge.token:
+                return captcha_challenge.token
+            time.sleep(1)
