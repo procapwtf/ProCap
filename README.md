@@ -28,7 +28,7 @@ captchaToken = solver.solve(url=url, sitekey=sitekey, proxy=proxy, userAgent=use
 * 2 - Example 2 (Create task)
 
 ```python
-from procap import ProCap
+from ProCap import ProCap
 apikey = "" # Api key (required)
 url = "" # Link to captcha (required)
 sitekey = "" # Sitekey (required)
@@ -47,7 +47,7 @@ captchaTask.challengeKey # Captcha challenge key
 
 * 3 - Example (Get Task Result)
 ```python
-from procap import ProCap
+from ProCap import ProCap
 apikey = "" # Your api key
 solver = ProCap(apikey)
 id = "Challenge ID" 
@@ -62,7 +62,7 @@ captchaTask.challengeKey # Captcha challenge key
 
 * 4 - Example (Get balance)
 ```python
-from procap import ProCap
+from ProCap import ProCap
 apikey = "" # Api key (required)
 solver = ProCap(apikey)
 balance = solver.get_balance()
