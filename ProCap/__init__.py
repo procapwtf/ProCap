@@ -31,7 +31,12 @@ class ProCap:
         request = requests.get("https://api.procap.wtf/checkTask/"+id)
         return Task(request.json())
     def solve(self, url, sitekey, proxy=None, userAgent=None, rqdata=None):
-        task = self.createTask(url, sitekey, proxy, userAgent, rqdata)
+        while True:
+            task = self.createTask(url, sitekey, proxy, userAgent, rqdata)
+            if "busy" not in task.message:
+                break
+            else:
+                time.sleep(5)
         if not task.success:
             return task.message
         while True:
