@@ -14,7 +14,7 @@ pip install procap
 * 1 - Example (Solve)
 
 ```python
-from procap import ProCap
+from ProCap import ProCap
 apikey = "" # Api key (required)
 url = "" # Link to captcha (required)
 sitekey = "" # Sitekey (required)
