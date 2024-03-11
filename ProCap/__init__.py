@@ -8,15 +8,23 @@ class Task:
         self.success = response.get("Success")
         self.token = response["Results"].get("Pass")
         self.challengeKey = response["Results"].get("ChallengeKey")
+        self.response = response
+class User:
+    def __init__(self, response: dict) -> None:
+        self.balance = response.get("balance")
+        self.daily_limit = response.get("daily_limit")
+        self.next_reset = response.get("next_reset")
+        self.daily_used = response.get("daily_used")
+        self.daily_remaining = response.get("daily_remaining")
+        self.plan_expire = response.get("plan_expire")
+        self.response = response
 class ProCap:
     def __init__(self, apikey) -> None:
         self.apikey = apikey
         self.headers = {"apikey": apikey}
     def get_balance(self):
-        request = requests.get("https://api.procap.wtf/balance", headers=self.headers)
-        js = request.json()
-        balance = js.get("balance")
-        return balance if balance != None else js.get("error")
+        request = requests.get("https://api.procap.wtf/user", headers=self.headers)
+        return User(request.json())
     def createTask(self, url, sitekey, proxy=None, userAgent=None, rqdata=None):
         payload = {
             "url": url,
@@ -43,6 +51,6 @@ class ProCap:
             captcha_challenge = self.checkTask(task.id)
             if captcha_challenge.message != "solving" and captcha_challenge.message != "solved":
                 return None
-            if captcha_challenge.token:
+            if captcha_challenge.message == "solved":
                 return captcha_challenge.token
             time.sleep(1)
