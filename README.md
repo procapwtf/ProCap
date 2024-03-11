@@ -23,6 +23,7 @@ userAgent = "" # User agent (optional)
 rqdata = "" # RQData (optional)
 solver = ProCap(apikey)
 captchaToken = solver.solve(url=url, sitekey=sitekey, proxy=proxy, userAgent=userAgent, rqdata=rqdata)
+print(f"Captcha token : {captchaToken}")
 ```
 
 * 2 - Example 2 (Create task)
@@ -43,6 +44,7 @@ captchaTask.message # Message
 captchaTask.success # Success [True or False]
 captchaTask.token # Captcha Token (if solved)
 captchaTask.challengeKey # Captcha challenge key
+captchaTask.response # Get api full response
 ```
 
 * 3 - Example (Get Task Result)
@@ -58,13 +60,20 @@ captchaTask.message # Message
 captchaTask.success # Success [True or False]
 captchaTask.token # Captcha Token (if solved)
 captchaTask.challengeKey # Captcha challenge key
+captchaTask.response # Get api full response
 ```
 
-* 4 - Example (Get balance)
+* 4 - Example (Get account information)
 ```python
 from ProCap import ProCap
 apikey = "" # Api key (required)
 solver = ProCap(apikey)
-balance = solver.get_balance()
-print(f"Your balance is {balance}$")
+user = solver.get_balance()
+user.balance # Get user balance
+user.daily_limit # Get user daily limit
+user.next_reset # Get user next credits reset
+user.daily_used # Get user daily used
+user.daily_remaining # Get user daily remaining
+user.plan_expire # Get user plan expiration
+user.response # Get api full response
 ```
