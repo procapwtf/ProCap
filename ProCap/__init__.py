@@ -2,12 +2,12 @@ import requests
 import time
 class Task:
     def __init__(self, response: dict) -> None:
-        self.id = response.get("ID")
-        self.time = response.get("Time")
-        self.message = response.get("Message")
-        self.success = response.get("Success")
-        self.token = response["Results"].get("Pass")
-        self.challengeKey = response["Results"].get("ChallengeKey")
+        self.id = response.get("taskId")
+        self.time = response.get("time")
+        self.success = response.get("success")
+        self.token = response["solution"].get("generated_pass_uuid")
+        self.error = response.get("error")
+        self.challengeKey = response["solution"].get("challenge_key")
         self.response = response
 class User:
     def __init__(self, response: dict) -> None:
@@ -21,36 +21,39 @@ class User:
 class ProCap:
     def __init__(self, apikey) -> None:
         self.apikey = apikey
-        self.headers = {"apikey": apikey}
     def get_balance(self):
-        request = requests.get("https://api.procap.wtf/user", headers=self.headers)
+        request = requests.get("https://api.procap.wtf/user")
         return User(request.json())
-    def createTask(self, url, sitekey, proxy=None, userAgent=None, rqdata=None):
+    def createTask(self, url, sitekey, proxy=None, userAgent=None, rqdata=None, isEnterprise=False, type="hCaptchaTask"):
         payload = {
-            "url": url,
-            "sitekey": sitekey,
-            "proxy": proxy,
-            "userAgent": userAgent,
-            "rqdata": rqdata
+            "clientKey": self.apikey,
+            "task": {
+                "type": type,
+                "href":url,
+                "sitekey": sitekey,
+                "proxy": proxy,
+                "useragent": userAgent,
+                "rqdata": rqdata,
+            }
         }
-        request = requests.post("https://api.procap.wtf/createTask", json=payload, headers=self.headers)
+        if "hcaptcha" in type:
+            payload.update({"isEnterprise": isEnterprise})
+        request = requests.post("https://api.procap.wtf/createTask", json=payload)
         return Task(request.json())
     def checkTask(self, id):
-        request = requests.get("https://api.procap.wtf/checkTask/"+id)
+        request = requests.get("https://api.procap.wtf/checkTask", json={
+            "clientKey": self.apikey,
+            "taskId": id
+        })
         return Task(request.json())
-    def solve(self, url, sitekey, proxy=None, userAgent=None, rqdata=None):
-        while True:
-            task = self.createTask(url, sitekey, proxy, userAgent, rqdata)
-            if "busy" not in task.message:
-                break
-            else:
-                time.sleep(5)
-        if not task.success:
-            return task.message
+    def solve(self, url, sitekey, proxy=None, userAgent=None, rqdata=None, isEnterprise=False):
+        task = self.createTask(url, sitekey, proxy, userAgent, rqdata, isEnterprise)
+        if not task.error:
+            return task.error
         while True:
             captcha_challenge = self.checkTask(task.id)
-            if captcha_challenge.message != "solving" and captcha_challenge.message != "solved":
+            if not captcha_challenge.success:
                 return None
-            if captcha_challenge.message == "solved":
+            if captcha_challenge.success:
                 return captcha_challenge.token
-            time.sleep(1)
+            time.sleep(0.5)
