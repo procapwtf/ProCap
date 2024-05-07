@@ -11,7 +11,7 @@ pip install procap
 
 ### 💡 Examples
 
-* 1 - Example (Solve)
+* 1 - Example (hCaptcha Solve)
 
 ```python
 from ProCap import ProCap
@@ -22,11 +22,11 @@ proxy = "" # Proxy (optional)
 userAgent = "" # User agent (optional)
 rqdata = "" # RQData (optional)
 solver = ProCap(apikey)
-captchaToken = solver.solve(url=url, sitekey=sitekey, proxy=proxy, userAgent=userAgent, rqdata=rqdata)
+captchaToken = solver.solve(url=url, sitekey=sitekey, proxy=proxy, userAgent=userAgent, rqdata=rqdata, type="hCaptchaTask")
 print(f"Captcha token : {captchaToken}")
 ```
 
-* 2 - Example 2 (Create task)
+* 2 - Example 2 (Create task for hCaptcha)
 
 ```python
 from ProCap import ProCap
@@ -37,14 +37,14 @@ proxy = "" # Proxy (optional)
 userAgent = "" # User agent (optional)
 rqdata = "" # RQData (optional)
 solver = ProCap(apikey)
-captchaTask = solver.createTask(url=url, sitekey=sitekey, proxy=proxy, userAgent=userAgent, rqdata=rqdata)
+captchaTask = solver.createTask(url=url, sitekey=sitekey, proxy=proxy, userAgent=userAgent, rqdata=rqdata, type="hCaptchaTask")
 captchaTask.id # Task id
 captchaTask.time # Time taken
 captchaTask.message # Message
 captchaTask.success # Success [True or False]
 captchaTask.token # Captcha Token (if solved)
 captchaTask.challengeKey # Captcha challenge key
-captchaTask.response # Get api full response
+captchaTask.response # Get api json response
 ```
 
 * 3 - Example (Get Task Result)
@@ -60,7 +60,7 @@ captchaTask.message # Message
 captchaTask.success # Success [True or False]
 captchaTask.token # Captcha Token (if solved)
 captchaTask.challengeKey # Captcha challenge key
-captchaTask.response # Get api full response
+captchaTask.response # Get api json response
 ```
 
 * 4 - Example (Get account information)
@@ -75,5 +75,5 @@ user.next_reset # Get user next credits reset
 user.daily_used # Get user daily used
 user.daily_remaining # Get user daily remaining
 user.plan_expire # Get user plan expiration
-user.response # Get api full response
+user.response # Get api json response
 ```
