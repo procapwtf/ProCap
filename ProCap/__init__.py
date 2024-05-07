@@ -48,7 +48,6 @@ class ProCap:
             "clientKey": self.apikey,
             "taskId": id
         })
-        print(request.text)
         return Task(request.json())
     def solve(self, url, sitekey, proxy=None, userAgent=None, rqdata=None, isEnterprise=False, type="hCaptchaTask"):
         task = self.createTask(url, sitekey, proxy, userAgent, rqdata, isEnterprise, type)
