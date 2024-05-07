@@ -26,7 +26,7 @@ class ProCap:
     def get_balance(self):
         request = requests.get("https://api.procap.wtf/user")
         return User(request.json())
-    def createTask(self, url, sitekey, proxy=None, userAgent=None, rqdata=None, isEnterprise=False, type="hCaptchaTask"):
+    def createTask(self, url=None, sitekey=None, proxy=None, userAgent=None, rqdata=None, isEnterprise=False, type="hCaptchaTask"):
         payload = {
             "clientKey": self.apikey,
             "task": {
@@ -49,7 +49,7 @@ class ProCap:
             "taskId": id
         })
         return Task(request.json())
-    def solve(self, url, sitekey, proxy=None, userAgent=None, rqdata=None, isEnterprise=False, type="hCaptchaTask"):
+    def solve(self, url=None, sitekey=None, proxy=None, userAgent=None, rqdata=None, isEnterprise=False, type="hCaptchaTask"):
         task = self.createTask(url, sitekey, proxy, userAgent, rqdata, isEnterprise, type)
         if task.error:
             return task.error
