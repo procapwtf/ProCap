@@ -3,11 +3,12 @@ import time
 class Task:
     def __init__(self, response: dict) -> None:
         self.id = response.get("taskId")
+        self.captchaType = response.get("captchaType")
         self.time = response.get("time")
         self.success = response.get("success")
         self.error = response.get("error")
         self.status = response.get("status")
-        self.token = response.get("solution").get("generated_pass_uuid")
+        self.token = response.get("solution").get("generated_pass_uuid") if self.captchaType == "hCaptchaTask" else response.get("solution")
         self.challengeKey = response.get("solution").get("challenge_key")
         self.response = response
 
@@ -24,14 +25,14 @@ class ProCap:
     def __init__(self, apikey) -> None:
         self.apikey = apikey
     def get_balance(self):
-        request = requests.get("https://api.procap.wtf/user")
+        request = requests.get("http://api.procap.wtf/user")
         return User(request.json())
     def createTask(self, url=None, sitekey=None, proxy=None, userAgent=None, rqdata=None, isEnterprise=False, type="hCaptchaTask"):
         payload = {
             "clientKey": self.apikey,
             "task": {
                 "type": type,
-                "href":url,
+                "href" if type == "hCaptchaTask" else "pjs": url,
                 "sitekey": sitekey,
                 "proxy": proxy,
                 "useragent": userAgent,
@@ -40,11 +41,12 @@ class ProCap:
         }
         if "hcaptcha" in type and isEnterprise:
             payload.update({"isEnterprise": isEnterprise})
-        request = requests.post("https://api.procap.wtf/createTask", json=payload).json()
+        request = requests.post("http://api.procap.wtf/createTask", json=payload)
+        request = request.json()
         request["solution"] = {}
         return Task(request)
     def checkTask(self, id):
-        request = requests.get("https://api.procap.wtf/checkTask", json={
+        request = requests.get("http://api.procap.wtf/checkTask", json={
             "clientKey": self.apikey,
             "taskId": id
         })
